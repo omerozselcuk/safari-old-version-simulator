@@ -1,0 +1,19 @@
+README.md
+  s_5611c6ea2a2502::t_7bd1fe3c786ae9 13,15
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "aed5e128f9d15d20291e77ece8fe6db4f3ff657e",
+  "prompts": {},
+  "sessions": {
+    "s_5611c6ea2a2502": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a103-9315-7f40-9f69-912430e467fb",
+        "model": "gpt-6-sol"
+      },
+      "human_author": "omer ozselcuk <omerozselcuk@users.noreply.github.com>"
+    }
+  }
+}
