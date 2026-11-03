@@ -10,9 +10,9 @@
 
 ![Approximate Safari 15.6 to WebKit 15.4 match shown in the desktop app](docs/screenshots/approximate-webkit-match.jpg)
 
-![Playwright WebKit browser window opened by Safari Old Version Simulator](docs/screenshots/playwright-webkit-browser.png)
+![Playwright WebKit browser displaying the GitHub Platform website](docs/screenshots/playwright-webkit-browser.png)
 
-The final screenshot shows the separate Playwright WebKit window. Page content and its language are controlled by the website.
+The selected website opens in a separate Playwright WebKit window.
 
 ## Download the macOS app
 
