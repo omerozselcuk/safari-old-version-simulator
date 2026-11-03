@@ -10,7 +10,7 @@
 
 ![Approximate Safari 15.6 to WebKit 15.4 match shown in the desktop app](docs/screenshots/approximate-webkit-match.jpg)
 
-![Playwright WebKit browser displaying the GitHub Platform website](docs/screenshots/playwright-webkit-browser.png)
+![Playwright WebKit browser displaying the GitHub Platform website](docs/screenshots/playwright-webkit-github-platform.png)
 
 The selected website opens in a separate Playwright WebKit window.
 
