@@ -1,0 +1,27 @@
+desktop/main.mjs
+  s_5611c6ea2a2502::t_76629ef1a80a1a 1-148
+package.json
+  s_5611c6ea2a2502::t_76629ef1a80a1a 1-48
+README.md
+  s_5611c6ea2a2502::t_76629ef1a80a1a 1-105
+desktop/index.html
+  s_5611c6ea2a2502::t_76629ef1a80a1a 1-46
+package-lock.json
+  s_5611c6ea2a2502::t_1cb70da1f1d450 1-5379
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9f79a32572adc0fe18098f673d97e877f6c30324",
+  "prompts": {},
+  "sessions": {
+    "s_5611c6ea2a2502": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a103-9315-7f40-9f69-912430e467fb",
+        "model": "gpt-5.6-terra"
+      },
+      "human_author": "omer ozselcuk <omerozselcuk@users.noreply.github.com>"
+    }
+  }
+}
