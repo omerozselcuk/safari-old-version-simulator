@@ -1,0 +1,83 @@
+{
+  "15.0": {
+    "playwrightVersion": "1.15.2",
+    "webkitVersion": "15.0",
+    "revision": "1550",
+    "source": "https://github.com/microsoft/playwright/blob/v1.15.2/browsers.json",
+    "versionSource": "https://github.com/microsoft/playwright/blob/v1.15.2/src/server/webkit/wkBrowser.ts"
+  },
+  "15.1": {
+    "playwrightVersion": "1.15.2",
+    "webkitVersion": "15.0",
+    "revision": "1550",
+    "source": "https://github.com/microsoft/playwright/blob/v1.15.2/browsers.json",
+    "versionSource": "https://github.com/microsoft/playwright/blob/v1.15.2/src/server/webkit/wkBrowser.ts",
+    "approximate": true
+  },
+  "15.2": {
+    "playwrightVersion": "1.15.2",
+    "webkitVersion": "15.0",
+    "revision": "1550",
+    "source": "https://github.com/microsoft/playwright/blob/v1.15.2/browsers.json",
+    "versionSource": "https://github.com/microsoft/playwright/blob/v1.15.2/src/server/webkit/wkBrowser.ts",
+    "approximate": true
+  },
+  "15.3": {
+    "playwrightVersion": "1.15.2",
+    "webkitVersion": "15.0",
+    "revision": "1550",
+    "source": "https://github.com/microsoft/playwright/blob/v1.15.2/browsers.json",
+    "versionSource": "https://github.com/microsoft/playwright/blob/v1.15.2/src/server/webkit/wkBrowser.ts",
+    "approximate": true
+  },
+  "15.4": {
+    "playwrightVersion": "1.23.4",
+    "webkitVersion": "15.4",
+    "revision": "1668",
+    "source": "https://github.com/microsoft/playwright/blob/v1.23.4/packages/playwright-core/browsers.json"
+  },
+  "15.5": {
+    "playwrightVersion": "1.23.4",
+    "webkitVersion": "15.4",
+    "revision": "1668",
+    "source": "https://github.com/microsoft/playwright/blob/v1.23.4/packages/playwright-core/browsers.json",
+    "approximate": true
+  },
+  "15.6": {
+    "playwrightVersion": "1.23.4",
+    "webkitVersion": "15.4",
+    "revision": "1668",
+    "source": "https://github.com/microsoft/playwright/blob/v1.23.4/packages/playwright-core/browsers.json",
+    "approximate": true
+  },
+  "16.4": {
+    "playwrightVersion": "1.32.1",
+    "webkitVersion": "16.4",
+    "revision": "1811",
+    "source": "https://github.com/microsoft/playwright/blob/v1.32.1/packages/playwright-core/browsers.json"
+  },
+  "17.0": {
+    "playwrightVersion": "1.37.1",
+    "webkitVersion": "17.0",
+    "revision": "1883",
+    "source": "https://github.com/microsoft/playwright/blob/v1.37.1/packages/playwright-core/browsers.json"
+  },
+  "17.4": {
+    "playwrightVersion": "1.43.1",
+    "webkitVersion": "17.4",
+    "revision": "1992",
+    "source": "https://github.com/microsoft/playwright/blob/v1.43.1/packages/playwright-core/browsers.json"
+  },
+  "18.0": {
+    "playwrightVersion": "1.48.2",
+    "webkitVersion": "18.0",
+    "revision": "2083",
+    "source": "https://github.com/microsoft/playwright/blob/v1.48.2/packages/playwright-core/browsers.json"
+  },
+  "18.4": {
+    "playwrightVersion": "1.52.0",
+    "webkitVersion": "18.4",
+    "revision": "2158",
+    "source": "https://github.com/microsoft/playwright/blob/v1.52.0/packages/playwright-core/browsers.json"
+  }
+}

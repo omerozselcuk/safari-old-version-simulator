@@ -1,0 +1,11 @@
+{
+  "safariVersion": "15.6.0",
+  "url": "about:blank",
+  "headless": false,
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "ignoreHTTPSErrors": false,
+  "allowApproximateVersion": true
+}

@@ -1,0 +1,48 @@
+{
+  "name": "safari-old-version-simulator",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "desktop/main.mjs",
+  "description": "Desktop launcher for historical Safari WebKit simulations",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node scripts/safari.mjs",
+    "desktop": "electron .",
+    "desktop:build": "electron-builder --mac dir",
+    "check": "node scripts/safari.mjs --check",
+    "smoke": "node scripts/safari.mjs --smoke",
+    "test": "node --test",
+    "browsers:install": "node scripts/safari.mjs --install-only"
+  },
+  "dependencies": {
+    "node": "22.23.4",
+    "npm": "11.21.1"
+  },
+  "devDependencies": {
+    "electron": "45.2.1",
+    "electron-builder": "26.18.0"
+  },
+  "build": {
+    "appId": "dev.safarioldversionsimulator.desktop",
+    "productName": "Safari Old Version Simulator",
+    "files": [
+      "desktop/**/*",
+      "scripts/safari.mjs",
+      "webkit-versions.json",
+      "safari.config.json",
+      "package.json"
+    ],
+    "asarUnpack": [
+      "node_modules/**"
+    ],
+    "mac": {
+      "target": "dir",
+      "identity": "-",
+      "hardenedRuntime": false,
+      "category": "public.app-category.developer-tools"
+    }
+  }
+}

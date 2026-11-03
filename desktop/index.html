@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:">
+  <title>Safari Old Version Simulator</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="renderer.js" defer></script>
+</head>
+<body>
+  <main class="app">
+    <div class="eyebrow">WEBKIT TEST ARACI</div>
+    <h1>Safari Old Version Simulator</h1>
+    <p class="intro">Safari hedefini seçin. Uygulama, o hedefe eşlenen Playwright WebKit penceresini açar.</p>
+
+    <section class="panel" aria-label="Tarayıcı ayarları">
+      <label for="version">Safari sürümü</label>
+      <select id="version"></select>
+      <div id="version-detail" class="detail"></div>
+
+      <div id="approximation" class="approximation" hidden>
+        <label class="check-row" for="allow-approximation">
+          <input id="allow-approximation" type="checkbox">
+          <span>Yaklaşık WebKit eşleşmesini kabul ediyorum.</span>
+        </label>
+      </div>
+
+      <label for="url" class="url-label">Açılacak adres</label>
+      <input id="url" type="text" inputmode="url" autocomplete="url" spellcheck="false" placeholder="https://example.com veya about:blank">
+      <p class="hint">Yerel siteler için örnek: http://localhost:3000</p>
+
+      <div class="actions">
+        <button id="launch" class="primary" type="button">Tarayıcıyı aç</button>
+        <button id="close" class="secondary" type="button" hidden>Tarayıcıyı kapat</button>
+      </div>
+    </section>
+
+    <div class="status" role="status" aria-live="polite">
+      <span id="status-dot" class="status-dot"></span>
+      <span id="status-text">Hazırlanıyor…</span>
+    </div>
+    <p class="footnote">Bu araç gerçek Safari uygulamasını açmaz. Eski sürümler bazı macOS sürümlerinde çalışmayabilir.</p>
+  </main>
+</body>
+</html>
