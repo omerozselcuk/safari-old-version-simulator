@@ -1,36 +1,70 @@
 # Safari Old Version Simulator
 
-## Masaüstü uygulaması (macOS)
+**Test websites against historical Safari WebKit builds on your Mac.** Safari Old Version Simulator is a macOS desktop app and Node.js tool that lets you select a Safari version, then opens the corresponding pinned **Playwright WebKit** browser. It is useful for checking CSS, JavaScript, and website behavior across older WebKit versions without changing your installed Safari.
 
-Proje klasöründe ilk kez `npm install` çalıştır, ardından:
+> This is a WebKit simulation, not an Apple Safari app or an iOS simulator. Some Safari selections use an approximate WebKit match. Historical browser builds may fail to launch on newer macOS versions.
+
+## Screenshots
+
+![Safari Old Version Simulator desktop app with a Safari version selector and URL field](docs/screenshots/safari-version-selector.jpg)
+
+![Approximate Safari 15.6 to WebKit 15.4 match shown in the desktop app](docs/screenshots/approximate-webkit-match.jpg)
+
+![Playwright WebKit browser window opened by Safari Old Version Simulator](docs/screenshots/playwright-webkit-browser.png)
+
+The final screenshot shows the separate Playwright WebKit window. Page content and its language are controlled by the website.
+
+## Download the macOS app
+
+Download the [Safari Old Version Simulator v1.0.0 release](https://github.com/omerozselcuk/safari-old-version-simulator/releases/tag/v1.0.0) for **Apple Silicon (arm64)**. Unzip it and open `Safari Old Version Simulator.app`. The app includes Node.js 22 and npm, so they do not need to be installed separately for the desktop download. An internet connection is needed the first time each selected Playwright and WebKit build is downloaded; later launches reuse the downloaded runtime.
+
+The release is ad-hoc signed and **not notarized with Apple Developer ID**. macOS Gatekeeper may warn or block it. For distribution without this warning, the app needs Developer ID signing and notarization. You can also build it locally from source.
+
+1. Select a **Safari version**.
+2. Enter a URL, such as `https://example.com` or `http://localhost:3000`.
+3. If the selection is approximate, acknowledge the WebKit version shown in the app.
+4. Choose **Open browser**. Close its window or choose **Close browser** when finished.
+
+The app remembers the last selection. It opens the website in a separate Playwright WebKit window; it does not reproduce Safari's address bar or browser chrome.
+
+## Run or build from source
+
+Use Node.js 22 LTS and npm on macOS. From the repository root:
 
 ```bash
+npm install
 npm run desktop
 ```
 
-Arayüzde Safari sürümünü ve açılacak adresi seçip **Tarayıcıyı aç** düğmesine bas. Yaklaşık eşleşen sürümler (örneğin Safari 15.6 → WebKit 15.4) için uyarıyı onaylamak gerekir. İlk kullanımda seçilen Playwright paketi ve WebKit indirilir. Açılan pencereyi veya arayüzdeki **Tarayıcıyı kapat** düğmesini kullanarak kapatabilirsin. Seçim sonraki açılış için saklanır.
-
-Çift tıklanabilir macOS uygulamasını oluşturmak için:
+To build the Apple Silicon app:
 
 ```bash
 npm run desktop:build
 ```
 
-Çıktı `dist/mac-arm64/Safari Simulator.app` yolundadır. Masaüstü paketi Node 22 ve npm içerir; kullanıcıda ayrıca Node kurulumu gerekmez. İndirilen motorlar uygulamanın kullanıcı verisi klasöründe saklanır. Bu yerel yapı Apple Developer ID ile imzalanıp noterlenmediği için başka Mac'lere dağıtmadan önce imzalama ve noterleme gerekir.
+The output is `dist/mac-arm64/Safari Old Version Simulator.app`. The first browser launch downloads the selected Playwright package and WebKit build. Desktop downloads are stored in the app's user data directory.
 
-Masaüstü arayüzü Safari'nin kendi adres çubuğunu veya arayüzünü taklit etmez; seçilen WebKit sayfası ayrı bir Playwright penceresinde açılır.
+## Supported Safari targets
 
-Ayar dosyasındaki Safari hedefini okuyup o sürüm ailesine karşılık gelen **Playwright WebKit** derlemesini açar. Her Playwright sürümü ayrı kurulur; sürüm değişince güncel WebKit'e sessizce geçilmez.
+Each target is pinned to a Playwright package, WebKit version, and browser revision. A target ending in `.0`, such as `16.4.0`, is accepted as the same version family as `16.4`; it does **not** represent an exact Safari patch release.
 
-## Kullanım
+| Safari selection | WebKit used | Playwright | Revision | Match |
+| --- | --- | --- | --- | --- |
+| 15.0 | 15.0 | 1.15.2 | 1550 | Direct |
+| 15.1–15.3 | 15.0 | 1.15.2 | 1550 | Approximate |
+| 15.4 | 15.4 | 1.23.4 | 1668 | Direct |
+| 15.5–15.6 | 15.4 | 1.23.4 | 1668 | Approximate |
+| 16.4 | 16.4 | 1.32.1 | 1811 | Direct |
+| 17.0 | 17.0 | 1.37.1 | 1883 | Direct |
+| 17.4 | 17.4 | 1.43.1 | 1992 | Direct |
+| 18.0 | 18.0 | 1.48.2 | 2083 | Direct |
+| 18.4 | 18.4 | 1.52.0 | 2158 | Direct |
 
-Node.js 22 LTS ve npm önerilir. NVM kullanıyorsan önce `nvm install && nvm use` çalıştır. İlk çalıştırma seçilen Playwright paketini ve WebKit'i internetten indirir. Proje kökünde:
+Approximate selections require `allowApproximateVersion: true` in the CLI configuration, or an explicit acknowledgement in the desktop app. The actual WebKit version is displayed; the tool does not spoof the Safari User-Agent. The source links for the pinned revisions are in [`webkit-versions.json`](webkit-versions.json). Runtime installation verifies the selected package and revision.
 
-```bash
-npm start
-```
+## Command line usage
 
-`safari.config.json`:
+The Node.js entry point uses [`safari.config.json`](safari.config.json). For example:
 
 ```json
 {
@@ -43,37 +77,20 @@ npm start
 }
 ```
 
-Dosya başlangıçta okunur; değişiklikten sonra scripti yeniden çalıştır. Varsayılan URL `about:blank`. Pencereyi kapat veya Ctrl+C ile çık.
+Run these commands from the repository root:
 
 ```bash
-npm run check                 # Ayarı ve seçilen derlemeyi gösterir; indirme yapmaz
-npm run browsers:install               # Yalnızca seçilen WebKit'i hazırlar
-npm run smoke                 # Pencere açmadan motor, DOM, JavaScript ve CSS kontrolü
-npm test                      # Sürüm seçimi ve ayar doğrulama testleri
+npm start                         # Open the configured WebKit browser
+npm run check                     # Check the version mapping without downloading
+npm run browsers:install          # Download the configured WebKit build
+npm run smoke                     # Run a headless DOM, JavaScript, and CSS check
+npm test                          # Run configuration and mapping tests
 npm start -- --config ./safari.config.json
 ```
 
-## Safari 15 yaklaşık hedefleri
+The config is read on startup, so restart the command after editing it. The default URL is `about:blank`. CLI runtimes are cached in `.runtimes/playwright-<version>/` and `.runtimes/browsers/`. When installing older WebKit builds, the tool uses Node 20 or 22; if necessary, set `SAFARI_INSTALL_NODE` to the absolute path of a compatible Node executable.
 
-15.0 ve 15.4 için ayrı Playwright WebKit derlemeleri var. 15.1, 15.2 ve 15.3 seçimleri yaklaşık olarak WebKit 15.0; 15.5 ve 15.6 seçimleri yaklaşık olarak WebKit 15.4 kullanır. Bunlar ilgili Safari sürümünün birebir karşılığı değildir. `15.6.0` da `15.6` gibi kabul edilir.
-
-Yaklaşık seçimler için ayarda `"allowApproximateVersion": true` zorunludur. Script hedefi ve kullanılan motoru gösterir, açık uyarı verir ve User-Agent'i hedef Safari sürümüne göre değiştirmez. Bu ayarı kapatınca eşleşmeyen hedefler hata verir. Mevcut `15.6.0` seçimi için yaklaşık kullanım açılmıştır.
-
-## Doğrudan eşlenen hedefler
-
-| safariVersion | Playwright | WebKit revision |
-| --- | --- | --- |
-| 15.0 / 15.0.0 | 1.15.2 | 1550 |
-| 15.4 / 15.4.0 | 1.23.4 | 1668 |
-| 16.4 / 16.4.0 | 1.32.1 | 1811 |
-| 17.0 / 17.0.0 | 1.37.1 | 1883 |
-| 17.4 / 17.4.0 | 1.43.1 | 1992 |
-| 18.0 / 18.0.0 | 1.48.2 | 2083 |
-| 18.4 / 18.4.0 | 1.52.0 | 2158 |
-
-Eşlemeler ilgili Playwright sürümünün resmi `browsers.json` dosyasından alınır. Playwright 1.22 öncesinde motor sürümü bu dosyada yer almadığından, 15.0 etiketi aynı sürümün `wkBrowser.ts` dosyasından doğrulanır; kurulumda paketin `wkBrowser.js` dosyası kontrol edilir. Kaynak bağlantıları `webkit-versions.json` içinde. Yeni hedef eklerken Playwright sürümünü, WebKit sürümünü ve revision değerini aynı kaynaktan doğrula.
-
-## Kendi Playwright scriptinden kullanma
+You can also call the launcher from a Playwright script:
 
 ```js
 import { openSafari } from './scripts/safari.mjs';
@@ -82,24 +99,17 @@ const { browser, page } = await openSafari();
 try {
   await page.goto('http://localhost:3000');
   console.log(await page.title());
-  // await page.locator('...').click();
 } finally {
   await browser.close();
 }
 ```
 
-`openSafari('./başka-ayar.json', { headless: true })` da kullanılabilir. Aynı Node sürecinde tek motor sürümü kullan; sürüm değiştirmek için yeni bir süreç başlat.
+`openSafari('./my-config.json', { headless: true })` is supported. Use a new Node process when switching WebKit versions.
 
-## Simülasyonun sınırları
+## Compatibility and limitations
 
-Playwright gerçek Safari.app veya geçmiş macOS/iOS sürümünü başlatmaz; kendi yamalı WebKit derlemesini çalıştırır. `16.4.0`, WebKit 16.4 ailesi için bir seçim adıdır; birebir Safari 16.4.0 yama sürümü değildir. Aynı WebKit sürüm etiketi içindeki revision'lar da farklı olabilir. User-Agent değiştirilerek motor sürümü taklit edilmez.
+Playwright launches its own patched WebKit build, not a historical Safari.app or macOS/iOS installation. Safari UI, Apple DRM/FairPlay, system codecs, HLS integration, and iOS behavior may differ from a real device. For an exact Safari release, test on the corresponding macOS or iOS device, a suitable virtual machine, or a service with real Safari browsers.
 
-Safari arayüzü, Apple DRM/FairPlay, sistem codec'leri, HLS entegrasyonu ve iOS davranışı gerçek cihazla aynı olmayabilir. Birebir Safari sürümü gerekiyorsa o sürümü taşıyan macOS/iOS cihazı, sanal makine veya gerçek Safari sunan uzak test servisi gerekir.
+Older WebKit binaries depend on the host macOS version and CPU architecture. In particular, Safari 15 WebKit builds can exit with `Target closed` on recent macOS systems, including macOS 15.7.9. The tool does not silently replace a failed historical build with the latest WebKit. It also checks the launched engine version so an operating system specific revision cannot be mistaken for the selected target.
 
-Eski WebKit derlemelerinin çalışması işletim sistemi ve mimariye bağlıdır. Playwright eski sistemlerde başka bir revision kullanabilir; script açılan motorun sürümünü doğrular ve yanlış sürümde hata verir. Yeni sistemlerde de eski derleme açılmayabilir. Başarısız indirmede veya açılışta yeni sürüme otomatik geçmez.
-
-İndirilen paketler `.runtimes/playwright-<sürüm>/`, tarayıcılar `.runtimes/browsers/` altında tutulur ve sonraki çalıştırmalarda kullanılır.
-
-Eski Playwright kurucusu Node 26 ile arşivi eksik açabilir. Script indirme gerektiğinde Node 20/22 kullanır; mevcut NVM kurulumlarında bunu otomatik bulur. Başka konumdaki Node için `SAFARI_INSTALL_NODE=/tam/yol/node npm start` kullan. Eksik bir kurulum sonraki denemede `.runtimes/incomplete-*` altına taşınır ve yeniden indirilir.
-
-macOS 26 üzerinde WebKit 15'in eski süreç profilleri, yeni sistemin kullandığı `ulock_wait2` (syscall 544) çağrısını engelleyip WebContent sürecini kapatabilir. Script bu sistemlerde WebKit 15'in WebContent, Network ve GPU profillerine yalnızca `SYS_ulock_wait2` iznini ekler; aynı izin WebKit 16.4'ün profillerinde bulunur. Orijinal dosyalar aynı klasörde `.safari-simulator.original` uzantısıyla yedeklenir. Sandbox diğer kurallarıyla etkin kalır; motor ikili dosyaları değiştirilmez.
+For macOS 26, the launcher adds the missing `SYS_ulock_wait2` permission to WebKit 15 process sandbox profiles when applicable and backs up the original profiles. This compatibility adjustment does not guarantee that those historical builds will run.

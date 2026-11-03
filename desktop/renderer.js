@@ -20,8 +20,8 @@ function showVersion() {
   if (!item) return;
   approximation.hidden = !item.approximate;
   versionDetail.textContent = item.approximate
-    ? `Yaklaşık eşleşme: Safari ${item.version} için WebKit ${item.webkitVersion} kullanılır. Birebir Safari sürümü değildir.`
-    : `Doğrudan eşleşme: WebKit ${item.webkitVersion}`;
+    ? `Approximate match: Safari ${item.version} uses WebKit ${item.webkitVersion}. This is not the exact Safari version.`
+    : `Direct match: WebKit ${item.webkitVersion}`;
   versionDetail.classList.toggle('warning', item.approximate);
   updateButtons();
 }
@@ -35,7 +35,7 @@ function updateButtons() {
   versionSelect.disabled = busy || running;
   urlInput.disabled = busy || running;
   approval.disabled = busy || running;
-  launchButton.textContent = status.phase === 'preparing' ? 'Hazırlanıyor…' : 'Tarayıcıyı aç';
+  launchButton.textContent = status.phase === 'preparing' ? 'Preparing…' : 'Open browser';
 }
 
 function showStatus(next) {
@@ -78,10 +78,10 @@ window.safariSimulator.getState().then(initial => {
   for (const item of versions) {
     const option = document.createElement('option');
     option.value = item.version;
-    option.textContent = `Safari ${item.version}${item.approximate ? ' · yaklaşık' : ''}`;
+    option.textContent = `Safari ${item.version}${item.approximate ? ' · approximate' : ''}`;
     versionSelect.append(option);
   }
-  versionSelect.value = initial.settings.safariVersion;
+  versionSelect.value = initial.settings.safariVersion.replace(/^(\d+\.\d+)\.0$/, '$1');
   urlInput.value = initial.settings.url;
   approval.checked = initial.settings.allowApproximateVersion;
   showStatus(initial.status);

@@ -13,7 +13,7 @@ let window;
 let settings;
 let browser;
 let opening = false;
-let status = { phase: 'idle', message: 'Sürüm ve adres seçip tarayıcıyı açın.' };
+let status = { phase: 'idle', message: 'Choose a Safari version and URL, then open the browser.' };
 
 function setStatus(phase, message) {
   status = { phase, message };
@@ -54,9 +54,9 @@ async function loadSettings() {
 function createWindow() {
   window = new BrowserWindow({
     width: 580,
-    height: 660,
+    height: 740,
     minWidth: 480,
-    minHeight: 600,
+    minHeight: 660,
     title: 'Safari Old Version Simulator',
     titleBarStyle: 'hiddenInset',
     backgroundColor: '#f7f8fa',
@@ -84,10 +84,10 @@ ipcMain.handle('get-state', () => ({
 
 ipcMain.handle('launch-browser', async (_event, request) => {
   if (opening || browser?.isConnected())
-    throw new Error('Bir tarayıcı zaten açık veya hazırlanıyor.');
+    throw new Error('A browser is already open or starting.');
   if (!request || typeof request !== 'object' ||
       typeof request.safariVersion !== 'string' || typeof request.url !== 'string')
-    throw new Error('Sürüm ve adres bilgisi geçersiz.');
+    throw new Error('Invalid Safari version or URL.');
 
   const input = {
     safariVersion: request.safariVersion,
@@ -99,7 +99,7 @@ ipcMain.handle('launch-browser', async (_event, request) => {
   };
   const selected = resolveConfig(input, catalog);
   opening = true;
-  setStatus('preparing', 'WebKit ' + selected.webkitVersion + ' hazırlanıyor…');
+  setStatus('preparing', 'Preparing WebKit ' + selected.webkitVersion + '…');
   try {
     const launched = await openSafariConfig(input, {
       onStatus: message => setStatus('preparing', message),
@@ -107,7 +107,7 @@ ipcMain.handle('launch-browser', async (_event, request) => {
     browser = launched.browser;
     browser.once('disconnected', () => {
       browser = undefined;
-      setStatus('idle', 'Tarayıcı kapandı. Yeni bir sürüm seçebilirsiniz.');
+      setStatus('idle', 'Browser closed. You can choose another version.');
     });
     launched.page.once('close', () => { void launched.browser.close(); });
     settings = {
@@ -119,7 +119,7 @@ ipcMain.handle('launch-browser', async (_event, request) => {
     await writeFile(join(app.getPath('userData'), 'settings.json'),
       JSON.stringify(settings, null, 2) + '\n', 'utf8');
     setStatus('running', 'Safari ' + selected.safariVersion +
-      ' hedefi açık · WebKit ' + selected.webkitVersion);
+      ' target is open · WebKit ' + selected.webkitVersion);
     return status;
   } catch (error) {
     if (browser?.isConnected()) await browser.close();
@@ -132,7 +132,7 @@ ipcMain.handle('launch-browser', async (_event, request) => {
 
 ipcMain.handle('close-browser', async () => {
   if (browser?.isConnected()) {
-    setStatus('closing', 'Tarayıcı kapatılıyor…');
+    setStatus('closing', 'Closing browser…');
     await browser.close();
   }
   return status;

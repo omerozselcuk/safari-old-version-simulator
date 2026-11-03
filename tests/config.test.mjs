@@ -37,7 +37,7 @@ test('desktop launch input is validated before installing a runtime', async () =
   );
   await assert.rejects(
     openSafariConfig({ safariVersion: '16.4', url: 'file:///tmp/test' }),
-    /url http:/,
+    /url must use http:\/\//,
   );
 });
 

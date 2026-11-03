@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="tr">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,37 +10,37 @@
 </head>
 <body>
   <main class="app">
-    <div class="eyebrow">WEBKIT TEST ARACI</div>
+    <div class="eyebrow">WEBKIT TESTING TOOL</div>
     <h1>Safari Old Version Simulator</h1>
-    <p class="intro">Safari hedefini seçin. Uygulama, o hedefe eşlenen Playwright WebKit penceresini açar.</p>
+    <p class="intro">Choose a Safari target. The app opens the matching Playwright WebKit browser.</p>
 
-    <section class="panel" aria-label="Tarayıcı ayarları">
-      <label for="version">Safari sürümü</label>
+    <section class="panel" aria-label="Browser settings">
+      <label for="version">Safari version</label>
       <select id="version"></select>
       <div id="version-detail" class="detail"></div>
 
       <div id="approximation" class="approximation" hidden>
         <label class="check-row" for="allow-approximation">
           <input id="allow-approximation" type="checkbox">
-          <span>Yaklaşık WebKit eşleşmesini kabul ediyorum.</span>
+          <span>I understand this is an approximate WebKit match.</span>
         </label>
       </div>
 
-      <label for="url" class="url-label">Açılacak adres</label>
-      <input id="url" type="text" inputmode="url" autocomplete="url" spellcheck="false" placeholder="https://example.com veya about:blank">
-      <p class="hint">Yerel siteler için örnek: http://localhost:3000</p>
+      <label for="url" class="url-label">URL to open</label>
+      <input id="url" type="text" inputmode="url" autocomplete="url" spellcheck="false" placeholder="https://example.com or about:blank">
+      <p class="hint">For local sites, try http://localhost:3000</p>
 
       <div class="actions">
-        <button id="launch" class="primary" type="button">Tarayıcıyı aç</button>
-        <button id="close" class="secondary" type="button" hidden>Tarayıcıyı kapat</button>
+        <button id="launch" class="primary" type="button">Open browser</button>
+        <button id="close" class="secondary" type="button" hidden>Close browser</button>
       </div>
     </section>
 
     <div class="status" role="status" aria-live="polite">
       <span id="status-dot" class="status-dot"></span>
-      <span id="status-text">Hazırlanıyor…</span>
+      <span id="status-text">Loading…</span>
     </div>
-    <p class="footnote">Bu araç gerçek Safari uygulamasını açmaz. Eski sürümler bazı macOS sürümlerinde çalışmayabilir.</p>
+    <p class="footnote">This tool does not launch Safari.app. Older WebKit builds may not run on every macOS version.</p>
   </main>
 </body>
 </html>
