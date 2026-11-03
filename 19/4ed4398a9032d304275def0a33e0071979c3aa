@@ -1,0 +1,33 @@
+scripts/safari.mjs
+  s_5611c6ea2a2502::t_30e2dfa8a504a4 14,17,20,25,28,30,33,36-37,41,61-62,71,82,98,103,110,132-133,153-154,173,179,187-188,202,206,210,220-221,253,258,261,263,266,275,287,289,296-297,299,301-302,316-317
+desktop/index.html
+  s_5611c6ea2a2502::t_50dcbf2e9b2d35 2,13,15,17-18,25,29-31,34-35,41,43
+desktop/main.mjs
+  s_5611c6ea2a2502::t_1fbfbcb8d93a35 57,59
+  s_5611c6ea2a2502::t_50dcbf2e9b2d35 16,87,90,102,110,122,135
+desktop/renderer.js
+  s_5611c6ea2a2502::t_7a44d6bc7cba8b 84
+  s_5611c6ea2a2502::t_50dcbf2e9b2d35 23-24,38,81
+README.md
+  s_5611c6ea2a2502::t_2f213191851e41 3,5-8,10,12,17-20,22-32,35,39,45,47,49,51-61,63,65,67,80,83-87,91,93,107,109,111,113,115
+  s_5611c6ea2a2502::t_9e22070d0a3b77 13-16,21
+  s_5611c6ea2a2502::t_2c544108d55cc6 9,11
+tests/config.test.mjs
+  s_5611c6ea2a2502::t_2c544108d55cc6 40
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "194ed4398a9032d304275def0a33e0071979c3aa",
+  "prompts": {},
+  "sessions": {
+    "s_5611c6ea2a2502": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a103-9315-7f40-9f69-912430e467fb",
+        "model": "gpt-6-sol"
+      },
+      "human_author": "omer ozselcuk <omerozselcuk@users.noreply.github.com>"
+    }
+  }
+}
