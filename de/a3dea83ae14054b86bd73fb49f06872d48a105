@@ -1,0 +1,44 @@
+package.json
+  s_5611c6ea2a2502::t_243be44a3b9013 15,35,45
+  s_5611c6ea2a2502::t_0e8c5af636dd3e 3
+README.md
+  s_5611c6ea2a2502::t_32c362402e6eba 19,32,36,39-41,44,47-51,69
+  s_5611c6ea2a2502::t_454a3b3f6ca638 70
+desktop/main.mjs
+  s_5611c6ea2a2502::t_243be44a3b9013 6,18,83-84,114-117,160-163,165-172,174-179
+  s_5611c6ea2a2502::t_6deddfdd411851 17,91,107-108,141-142,164,173
+webkit-versions.json
+  s_5611c6ea2a2502::t_243be44a3b9013 78
+scripts/platform.mjs
+  s_5611c6ea2a2502::t_243be44a3b9013 1-15
+desktop/renderer.js
+  s_5611c6ea2a2502::t_243be44a3b9013 22,25,32,82-85
+start.sh
+  s_5611c6ea2a2502::t_900026cef9071c 60,72
+  s_5611c6ea2a2502::t_32c362402e6eba 59
+  s_5611c6ea2a2502::t_243be44a3b9013 1-58,61-71
+scripts/safari.mjs
+  s_5611c6ea2a2502::t_243be44a3b9013 9,27-29,155-156
+tests/platform.test.mjs
+  s_5611c6ea2a2502::t_9a3e64b00abaea 1-68
+scripts/package-macos.mjs
+  s_5611c6ea2a2502::t_243be44a3b9013 1-59
+package-lock.json
+  s_5611c6ea2a2502::t_bd1329fd3dc303 3,9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "dea3dea83ae14054b86bd73fb49f06872d48a105",
+  "prompts": {},
+  "sessions": {
+    "s_5611c6ea2a2502": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a103-9315-7f40-9f69-912430e467fb",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "omer ozselcuk <omerozselcuk@users.noreply.github.com>"
+    }
+  }
+}
