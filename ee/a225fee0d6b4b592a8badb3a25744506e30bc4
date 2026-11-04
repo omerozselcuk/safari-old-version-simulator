@@ -1,0 +1,30 @@
+package.json
+  s_5611c6ea2a2502::t_d8502d4dc8da47 3
+tests/config.test.mjs
+  s_5611c6ea2a2502::t_8ec9fe0f750a0f 78,86-91
+  s_5611c6ea2a2502::t_88f8d25e0686cd 92-93
+scripts/safari.mjs
+  s_5611c6ea2a2502::t_e003e859c417a7 134
+  s_5611c6ea2a2502::t_9511bf662c33b3 125
+  s_5611c6ea2a2502::t_8ec9fe0f750a0f 106,108-121,135-138,146-147
+README.md
+  s_5611c6ea2a2502::t_e003e859c417a7 19,113,115
+package-lock.json
+  s_5611c6ea2a2502::t_d47011ddade8ba 3,9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "eea225fee0d6b4b592a8badb3a25744506e30bc4",
+  "prompts": {},
+  "sessions": {
+    "s_5611c6ea2a2502": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a103-9315-7f40-9f69-912430e467fb",
+        "model": "gpt-6-sol"
+      },
+      "human_author": "omer ozselcuk <omerozselcuk@users.noreply.github.com>"
+    }
+  }
+}
