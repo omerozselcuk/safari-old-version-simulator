@@ -19,17 +19,17 @@ function showVersion() {
   const item = selectedVersion();
   if (!item) return;
   approximation.hidden = !item.approximate;
-  versionDetail.textContent = item.approximate
+  versionDetail.textContent = item.available === false ? item.reason : item.approximate
     ? `Approximate match: Safari ${item.version} uses WebKit ${item.webkitVersion}. This is not the exact Safari version.`
     : `Direct match: WebKit ${item.webkitVersion}`;
-  versionDetail.classList.toggle('warning', item.approximate);
+  versionDetail.classList.toggle('warning', item.approximate || item.available === false);
   updateButtons();
 }
 
 function updateButtons() {
   const busy = status.phase === 'preparing' || status.phase === 'closing';
   const running = status.phase === 'running';
-  launchButton.disabled = busy || running ||
+  launchButton.disabled = busy || running || selectedVersion()?.available === false ||
     (selectedVersion()?.approximate && !approval.checked);
   closeButton.hidden = !running;
   versionSelect.disabled = busy || running;
@@ -79,6 +79,10 @@ window.safariSimulator.getState().then(initial => {
     const option = document.createElement('option');
     option.value = item.version;
     option.textContent = `Safari ${item.version}${item.approximate ? ' · approximate' : ''}`;
+    if (item.available === false) {
+      option.disabled = true;
+      option.textContent += ` · requires macOS ${item.minimumMacOS}+`;
+    }
     versionSelect.append(option);
   }
   versionSelect.value = initial.settings.safariVersion.replace(/^(\d+\.\d+)\.0$/, '$1');

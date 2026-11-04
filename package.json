@@ -1,6 +1,6 @@
 {
   "name": "safari-old-version-simulator",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "type": "module",
   "main": "desktop/main.mjs",
@@ -12,6 +12,7 @@
     "start": "node scripts/safari.mjs",
     "desktop": "electron .",
     "desktop:build": "electron-builder --mac dir",
+    "desktop:package": "npm run desktop:build && node scripts/package-macos.mjs",
     "check": "node scripts/safari.mjs --check",
     "smoke": "node scripts/safari.mjs --smoke",
     "test": "node --test",
@@ -31,6 +32,7 @@
     "files": [
       "desktop/**/*",
       "scripts/safari.mjs",
+      "scripts/platform.mjs",
       "webkit-versions.json",
       "safari.config.json",
       "package.json"
@@ -40,6 +42,7 @@
     ],
     "mac": {
       "target": "dir",
+      "minimumSystemVersion": "13.0",
       "identity": "-",
       "hardenedRuntime": false,
       "category": "public.app-category.developer-tools"

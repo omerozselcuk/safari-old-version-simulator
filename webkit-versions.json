@@ -75,6 +75,7 @@
     "source": "https://github.com/microsoft/playwright/blob/v1.48.2/packages/playwright-core/browsers.json"
   },
   "18.4": {
+    "minimumMacOS": 14,
     "playwrightVersion": "1.52.0",
     "webkitVersion": "18.4",
     "revision": "2158",

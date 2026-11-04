@@ -6,6 +6,7 @@ import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { homedir, release } from 'node:os';
 import { promisify } from 'node:util';
+import { getTargetCompatibility } from './platform.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -23,6 +24,9 @@ export function resolveConfig(config, catalog) {
       !/^\d+\.\d+$/.test(entry.webkitVersion) ||
       (entry.webkitVersion !== family && entry.approximate !== true) || !/^\d+$/.test(entry.revision))
     throw new Error('Invalid mapping in the WebKit version catalog.');
+  if (entry.minimumMacOS !== undefined &&
+      (!Number.isInteger(entry.minimumMacOS) || entry.minimumMacOS < 11))
+    throw new Error('Invalid minimum macOS version in the WebKit catalog.');
   const url = config.url ?? 'about:blank';
   let parsed;
   try { parsed = new URL(url); } catch { throw new Error('url must be a valid URL.'); }
@@ -148,6 +152,8 @@ async function ensureMacCompatibility(webkit, config) {
 }
 
 export async function prepareRuntime(config, onStatus = () => {}) {
+  const compatibility = getTargetCompatibility(config);
+  if (!compatibility.available) throw new Error(compatibility.reason);
   const runtimeRoot = resolve(process.env.SAFARI_RUNTIME_DIR ?? join(root, '.runtimes'));
   const runtime = join(runtimeRoot, 'playwright-' + config.playwrightVersion);
   const browsersPath = join(runtimeRoot, 'browsers');

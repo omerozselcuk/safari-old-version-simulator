@@ -3,6 +3,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { openSafariConfig, resolveConfig } from '../scripts/safari.mjs';
+import { getTargetCompatibility } from '../scripts/platform.mjs';
 
 const projectRoot = fileURLToPath(new URL('../', import.meta.url));
 const desktopRoot = fileURLToPath(new URL('./', import.meta.url));
@@ -13,6 +14,8 @@ let window;
 let settings;
 let browser;
 let opening = false;
+let openingComplete;
+let quitting = false;
 let status = { phase: 'idle', message: 'Choose a Safari version and URL, then open the browser.' };
 
 function setStatus(phase, message) {
@@ -77,13 +80,15 @@ ipcMain.handle('get-state', () => ({
     version,
     webkitVersion: entry.webkitVersion,
     approximate: entry.approximate === true,
+    minimumMacOS: entry.minimumMacOS,
+    ...getTargetCompatibility(entry),
   })),
   settings,
   status,
 }));
 
 ipcMain.handle('launch-browser', async (_event, request) => {
-  if (opening || browser?.isConnected())
+  if (quitting || opening || browser?.isConnected())
     throw new Error('A browser is already open or starting.');
   if (!request || typeof request !== 'object' ||
       typeof request.safariVersion !== 'string' || typeof request.url !== 'string')
@@ -99,11 +104,17 @@ ipcMain.handle('launch-browser', async (_event, request) => {
   };
   const selected = resolveConfig(input, catalog);
   opening = true;
+  let finishOpening;
+  openingComplete = new Promise(resolve => { finishOpening = resolve; });
   setStatus('preparing', 'Preparing WebKit ' + selected.webkitVersion + '…');
   try {
     const launched = await openSafariConfig(input, {
       onStatus: message => setStatus('preparing', message),
     });
+    if (quitting) {
+      await launched.browser.close();
+      return status;
+    }
     browser = launched.browser;
     browser.once('disconnected', () => {
       browser = undefined;
@@ -127,6 +138,8 @@ ipcMain.handle('launch-browser', async (_event, request) => {
     throw error;
   } finally {
     opening = false;
+    finishOpening();
+    openingComplete = undefined;
   }
 });
 
@@ -144,5 +157,23 @@ app.whenReady().then(async () => {
   createWindow();
 });
 
-app.on('window-all-closed', () => app.quit());
-app.on('before-quit', () => { if (browser?.isConnected()) void browser.close(); });
+async function quitApp() {
+  if (quitting) return;
+  quitting = true;
+  try {
+    if (openingComplete) await openingComplete;
+    if (browser?.isConnected()) await browser.close();
+  } finally {
+    app.quit();
+  }
+}
+
+app.on('window-all-closed', () => { void quitApp(); });
+app.on('before-quit', event => {
+  if (!quitting && (opening || browser?.isConnected())) {
+    event.preventDefault();
+    void quitApp();
+  }
+});
+process.once('SIGINT', () => { void quitApp(); });
+process.once('SIGTERM', () => { void quitApp(); });

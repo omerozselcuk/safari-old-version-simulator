@@ -16,7 +16,7 @@ The selected website opens in a separate Playwright WebKit window.
 
 ## Download the macOS app
 
-Download the [Safari Old Version Simulator v1.0.1 release](https://github.com/omerozselcuk/safari-old-version-simulator/releases/tag/v1.0.1) for **Apple Silicon (arm64)**. Unzip it and open `Safari Old Version Simulator.app`. The app includes Node.js 22 and npm, so they do not need to be installed separately for the desktop download. An internet connection is needed the first time each selected Playwright and WebKit build is downloaded; later launches reuse the downloaded runtime.
+Download the [Safari Old Version Simulator v1.0.1 release](https://github.com/omerozselcuk/safari-old-version-simulator/releases/tag/v1.0.1) for **Apple Silicon (arm64), macOS Ventura 13 or later**. Unzip it and open `Safari Old Version Simulator.app`. The app includes Node.js 22 and npm, so they do not need to be installed separately for the desktop download. An internet connection is needed the first time each selected Playwright and WebKit build is downloaded; later launches reuse the downloaded runtime.
 
 The release is ad-hoc signed and **not notarized with Apple Developer ID**. macOS Gatekeeper may warn or block it. For distribution without this warning, the app needs Developer ID signing and notarization. You can also build it locally from source.
 
@@ -29,20 +29,26 @@ The app remembers the last selection. It opens the website in a separate Playwri
 
 ## Run or build from source
 
-Use Node.js 22 LTS and npm on macOS. From the repository root:
+Use Node.js 22 LTS and npm on an Apple Silicon Mac running macOS 13 or later. From the repository root:
 
 ```bash
 npm install
-npm run desktop
+./start.sh
 ```
 
-To build the Apple Silicon app:
+The terminal launcher opens the existing desktop interface. Keep Terminal running and press Ctrl+C to close the app and its browser. `npm run desktop` is also available.
+
+To create a ZIP containing the Finder application bundle and terminal launcher:
 
 ```bash
-npm run desktop:build
+npm run desktop:package
 ```
 
-The output is `dist/mac-arm64/Safari Old Version Simulator.app`. The first browser launch downloads the selected Playwright package and WebKit build. Desktop downloads are stored in the app's user data directory.
+The output ZIP in `dist/` contains `Safari Old Version Simulator.app`, `start.sh`, and `START-HERE.txt` together in one folder. Extract it, open Terminal in that folder, and run `./start.sh`. Check the system requirements without launching with `./start.sh --check`.
+
+The `.app` stays visible in Finder and can be moved to Applications. After moving it, use `./start.sh --app "/Applications/Safari Old Version Simulator.app"`. The launcher does not change macOS security settings; an app blocked by Gatekeeper still needs normal macOS approval or Developer ID signing and notarization.
+
+The unpackaged build is `dist/mac-arm64/Safari Old Version Simulator.app`. Downloaded engines are stored in the app's user data directory.
 
 ## Supported Safari targets
 
@@ -59,6 +65,8 @@ Each target is pinned to a Playwright package, WebKit version, and browser revis
 | 17.4 | 17.4 | 1.43.1 | 1992 | Direct |
 | 18.0 | 18.0 | 1.48.2 | 2083 | Direct |
 | 18.4 | 18.4 | 1.52.0 | 2158 | Direct |
+
+The pinned WebKit 18.4 revision requires macOS 14 or later. It is unavailable in the version picker on Ventura 13, because Playwright selects a different revision there. The launcher checks this before downloading a runtime.
 
 Approximate selections require `allowApproximateVersion: true` in the CLI configuration, or an explicit acknowledgement in the desktop app. The actual WebKit version is displayed; the tool does not spoof the Safari User-Agent. The source links for the pinned revisions are in [`webkit-versions.json`](webkit-versions.json). Runtime installation verifies the selected package and revision.
 
