@@ -16,7 +16,7 @@ The selected website opens in a separate Playwright WebKit window.
 
 ## Download the macOS app
 
-Download the [Safari Old Version Simulator v1.0.0 release](https://github.com/omerozselcuk/safari-old-version-simulator/releases/tag/v1.0.0) for **Apple Silicon (arm64)**. Unzip it and open `Safari Old Version Simulator.app`. The app includes Node.js 22 and npm, so they do not need to be installed separately for the desktop download. An internet connection is needed the first time each selected Playwright and WebKit build is downloaded; later launches reuse the downloaded runtime.
+Download the [Safari Old Version Simulator v1.0.1 release](https://github.com/omerozselcuk/safari-old-version-simulator/releases/tag/v1.0.1) for **Apple Silicon (arm64)**. Unzip it and open `Safari Old Version Simulator.app`. The app includes Node.js 22 and npm, so they do not need to be installed separately for the desktop download. An internet connection is needed the first time each selected Playwright and WebKit build is downloaded; later launches reuse the downloaded runtime.
 
 The release is ad-hoc signed and **not notarized with Apple Developer ID**. macOS Gatekeeper may warn or block it. For distribution without this warning, the app needs Developer ID signing and notarization. You can also build it locally from source.
 
@@ -110,6 +110,6 @@ try {
 
 Playwright launches its own patched WebKit build, not a historical Safari.app or macOS/iOS installation. Safari UI, Apple DRM/FairPlay, system codecs, HLS integration, and iOS behavior may differ from a real device. For an exact Safari release, test on the corresponding macOS or iOS device, a suitable virtual machine, or a service with real Safari browsers.
 
-Older WebKit binaries depend on the host macOS version and CPU architecture. In particular, Safari 15 WebKit builds can exit with `Target closed` on recent macOS systems, including macOS 15.7.9. The tool does not silently replace a failed historical build with the latest WebKit. It also checks the launched engine version so an operating system specific revision cannot be mistaken for the selected target.
+Older WebKit binaries depend on the host macOS version and CPU architecture. Incompatible builds may still exit with `Target closed`. The tool does not silently replace a failed historical build with the latest WebKit. It also checks the launched engine version so an operating system specific revision cannot be mistaken for the selected target.
 
-For macOS 26, the launcher adds the missing `SYS_ulock_wait2` permission to WebKit 15 process sandbox profiles when applicable and backs up the original profiles. This compatibility adjustment does not guarantee that those historical builds will run.
+On macOS 15 and later, the launcher adds missing `SYS_ulock_wait2` permissions to WebKit 15 process sandbox profiles and `SYS_os_fault_with_payload` to the WebKit 15.4 WebContent profile. It backs up the original profiles and keeps the sandbox enabled. On macOS 15.7.9, WebKit 15.0 and 15.4 opened a local test page successfully; other host versions are not guaranteed.

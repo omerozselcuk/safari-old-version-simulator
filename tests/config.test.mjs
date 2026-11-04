@@ -75,12 +75,20 @@ test('approximation cannot accept arbitrary versions or spoof Safari patches', (
   assert.equal(resolveConfig({ safariVersion: '15.4' }, catalog).approximate, false);
 });
 
-test('macOS 26 compatibility adds only the missing locking syscall and is idempotent', () => {
+test('macOS 15+ compatibility adds only the missing locking syscall and is idempotent', () => {
   const original = '(allow syscall-unix (syscall-number\n        SYS_ulock_wait\n        SYS_ulock_wake))';
   const updated = patchMacSandboxProfile(original);
   assert.equal(updated, original.replace('SYS_ulock_wait\n', 'SYS_ulock_wait\n        SYS_ulock_wait2\n'));
   assert.equal(patchMacSandboxProfile(updated), updated);
   assert.throws(() => patchMacSandboxProfile('(deny syscall-unix)'), /ulock_wait/);
+});
+
+test('WebKit 15.4 WebContent profile also permits fault reporting without broadening other profiles', () => {
+  const original = '(allow syscall-unix (syscall-number\n        SYS_ulock_wait\n        SYS_ulock_wake))';
+  const updated = patchMacSandboxProfile(original, { allowFaultReporting: true });
+  assert.match(updated, /SYS_ulock_wait\n        SYS_ulock_wait2\n        SYS_os_fault_with_payload\n/);
+  assert.equal(patchMacSandboxProfile(updated, { allowFaultReporting: true }), updated);
+  assert.doesNotMatch(patchMacSandboxProfile(original), /SYS_os_fault_with_payload/);
 });
 
 test('old profiles with existing locking permission or no syscall filter stay unchanged', () => {

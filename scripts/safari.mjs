@@ -103,16 +103,26 @@ async function installerNode() {
   throw new Error('Installing historical WebKit requires Node 20 or 22. Run "nvm install 22 && nvm use 22" or set SAFARI_INSTALL_NODE to a Node 22 executable.');
 }
 
-export function patchMacSandboxProfile(source) {
-  if (/\bSYS_ulock_wait2\b/.test(source)) return source;
+export function patchMacSandboxProfile(source, { allowFaultReporting = false } = {}) {
   if (!/\b(?:allow|deny) syscall-unix\b/.test(source)) return source;
-  if (!/^([ \t]*)SYS_ulock_wait\s*$/m.test(source))
-    throw new Error('The expected ulock_wait permission was not found in the WebKit profile.');
-  return source.replace(/^([ \t]*)SYS_ulock_wait([ \t]*)$/m, '$&\n$1SYS_ulock_wait2');
+  let updated = source;
+  if (!/\bSYS_ulock_wait2\b/.test(updated)) {
+    if (!/^([ \t]*)SYS_ulock_wait\s*$/m.test(updated))
+      throw new Error('The expected ulock_wait permission was not found in the WebKit profile.');
+    updated = updated.replace(/^([ \t]*)SYS_ulock_wait([ \t]*)$/m,
+      '$&\n$1SYS_ulock_wait2');
+  }
+  if (allowFaultReporting && !/\bSYS_os_fault_with_payload\b/.test(updated)) {
+    if (!/^([ \t]*)SYS_ulock_wait2\s*$/m.test(updated))
+      throw new Error('The expected ulock_wait2 permission was not found in the WebKit profile.');
+    updated = updated.replace(/^([ \t]*)SYS_ulock_wait2([ \t]*)$/m,
+      '$&\n$1SYS_os_fault_with_payload');
+  }
+  return updated;
 }
 
 async function ensureMacCompatibility(webkit, config) {
-  if (process.platform !== 'darwin' || Number(release().split('.')[0]) < 25 ||
+  if (process.platform !== 'darwin' || Number(release().split('.')[0]) < 24 ||
       !config.webkitVersion.startsWith('15.')) return;
   const resources = join(dirname(webkit.executablePath()),
     'WebKit.framework', 'Versions', 'A', 'Resources');
@@ -121,7 +131,11 @@ async function ensureMacCompatibility(webkit, config) {
     'com.apple.WebKit.NetworkProcess.sb', 'com.apple.WebKit.GPUProcess.sb']) {
     const profilePath = join(resources, filename);
     const original = await readFile(profilePath, 'utf8');
-    const updated = patchMacSandboxProfile(original);
+    // WebKit 15.4 WebContent also needs fault reporting during Launch Services setup.
+    const updated = patchMacSandboxProfile(original, {
+      allowFaultReporting: config.webkitVersion === '15.4' &&
+        filename === 'com.apple.WebProcess.sb',
+    });
     if (updated === original) continue;
     try { await copyFile(profilePath, profilePath + '.safari-simulator.original', constants.COPYFILE_EXCL); }
     catch (error) { if (error.code !== 'EEXIST') throw error; }
@@ -129,8 +143,8 @@ async function ensureMacCompatibility(webkit, config) {
     changed++;
   }
   if (changed)
-    console.log('macOS 26 compatibility: added ulock_wait2 permission to ' + changed +
-      ' WebKit 15 profiles; original files were backed up.');
+    console.log('macOS 15+ compatibility: updated ' + changed +
+      ' WebKit 15 sandbox profiles; original files were backed up.');
 }
 
 export async function prepareRuntime(config, onStatus = () => {}) {
